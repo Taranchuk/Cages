@@ -19,6 +19,7 @@ namespace Cages
     {
         public CageExtension Props => def.GetModExtension<CageExtension>();
         public HashSet<Pawn> cagedPawns;
+        public HashSet<Pawn> releasedPawns;
         public Dictionary<Thing, IntVec3> despawnedThings;
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
@@ -39,6 +40,10 @@ namespace Cages
             if (cagedPawns is null)
             {
                 cagedPawns = new HashSet<Pawn>();
+            }
+            if (releasedPawns is null)
+            {
+                releasedPawns = new HashSet<Pawn>();
             }
             if (despawnedThings is null)
             {
@@ -66,25 +71,52 @@ namespace Cages
             base.Tick();
             if (this.Spawned)
             {
-                foreach (var c in this.AllSlotCellsList())
+                var allPawns = this.AllSlotCellsList().SelectMany(x => x.GetThingList(Map).OfType<Pawn>()).ToList();
+                foreach (var pawn in allPawns)
                 {
-                    foreach (var pawn in c.GetThingList(Map).OfType<Pawn>().ToList())
+                    if (!cagedPawns.Contains(pawn) && !releasedPawns.Contains(pawn) && CanWorkOn(pawn))
                     {
-                        if (!cagedPawns.Contains(pawn) && CanWorkOn(pawn))
+                        if (Props.isLethal)
                         {
-                            if (Props.isLethal)
-                            {
-                                pawn.Kill(null);
-                            }
-                            else
-                            {
-                                Log.Message($"Caging {pawn} now");
-                                cagedPawns.Add(pawn);
-                            }
+                            pawn.Kill(null);
+                        }
+                        else
+                        {
+                            Log.Message($"Caging {pawn} now");
+                            cagedPawns.Add(pawn);
                         }
                     }
                 }
+                releasedPawns.RemoveWhere(x => !allPawns.Contains(x));
             }
+        }
+
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
+        {
+            foreach (var opt in base.GetFloatMenuOptions(selPawn))
+            {
+                yield return opt;
+            }
+            if (cagedPawns.Any())
+            {
+                yield return new FloatMenuOption("Cages.ReleaseFromCage".Translate(), delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Cages_DefOf.CCK_ReleaseFromCage, this));
+                });
+            }
+        }
+
+        public void ReleaseAll(Pawn releaser)
+        {
+            foreach (var pawn in cagedPawns)
+            {
+                if (!pawn.Dead && !pawn.Downed)
+                {
+                    pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(Cages_DefOf.CCK_FleeFromCage, this, releaser));
+                    releasedPawns.Add(pawn);
+                }
+            }
+            cagedPawns.RemoveWhere(x => releasedPawns.Contains(x));
         }
 
         private Graphic cageTopGraphic;
@@ -103,6 +135,7 @@ namespace Cages
         {
             base.ExposeData();
             Scribe_Collections.Look(ref cagedPawns, "cagedPawns", LookMode.Reference);
+            Scribe_Collections.Look(ref releasedPawns, "releasedPawns", LookMode.Reference);
             Scribe_Collections.Look(ref despawnedThings, "despawnedThings", LookMode.Deep, LookMode.Value);
             PreInit();
         }

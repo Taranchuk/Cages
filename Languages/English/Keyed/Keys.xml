@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
-  <SelfDestruction>Self-destruction</SelfDestruction>
-  <SelfDestructionDesc>Self-destruction causes an explosion capable of damaging everything in 3 tiles range.</SelfDestructionDesc>
-
+	<Cages.ReleaseFromCage>Release from cage</Cages.ReleaseFromCage>
 </LanguageData>
