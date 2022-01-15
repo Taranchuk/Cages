@@ -48,7 +48,7 @@
         <filter>
           <disallowNotEverStorable>true</disallowNotEverStorable>
           <categories>
-            <li>FoodRaw</li>
+            <li>Foods</li>
           </categories>
         </filter>
       </fixedStorageSettings>

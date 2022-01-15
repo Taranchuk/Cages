@@ -42,15 +42,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cages_DefOf.cs" />
-    <Compile Include="FoodUtility_WillEat_Patch.cs" />
     <Compile Include="Building_Cage.cs" />
-    <Compile Include="Designator_Uninstall_CanDesignateThing_Patch.cs" />
-    <Compile Include="JobDriver_Ingest_PrepareToIngestToils_NonToolUser_Patch.cs" />
-    <Compile Include="ForbidUtility_InAllowedArea_Patch.cs" />
+    <Compile Include="HarmonyPatches\CellFinder_RandomClosewalkCellNearNotForbidden_Patch.cs" />
+    <Compile Include="HarmonyPatches\Designator_Uninstall_CanDesignateThing_Patch.cs" />
+    <Compile Include="HarmonyPatches\FoodUtility_WillEat_Patch.cs" />
+    <Compile Include="HarmonyPatches\ForbidUtility_InAllowedArea_Patch.cs" />
+    <Compile Include="HarmonyPatches\JobDriver_Ingest_PrepareToIngestToils_NonToolUser_Patch.cs" />
+    <Compile Include="HarmonyPatches\Pawn_MindState_StartFleeingBecauseOfPawnAction_Patch_Patch.cs" />
+    <Compile Include="HarmonyPatches\ReachabilityImmediate_CanReachImmediate_Patch.cs" />
     <Compile Include="JobDriver_FleeFromCage.cs" />
     <Compile Include="JobDriver_ReleaseFromCage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer">
