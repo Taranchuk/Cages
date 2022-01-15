@@ -48,6 +48,8 @@
     <Compile Include="HarmonyPatches\FoodUtility_WillEat_Patch.cs" />
     <Compile Include="HarmonyPatches\ForbidUtility_InAllowedArea_Patch.cs" />
     <Compile Include="HarmonyPatches\JobDriver_Ingest_PrepareToIngestToils_NonToolUser_Patch.cs" />
+    <Compile Include="HarmonyPatches\JobGiver_ExitMap_TryGiveJob_Patch.cs" />
+    <Compile Include="HarmonyPatches\PathFinder_FindPath_Patch.cs" />
     <Compile Include="HarmonyPatches\Pawn_MindState_StartFleeingBecauseOfPawnAction_Patch_Patch.cs" />
     <Compile Include="HarmonyPatches\ReachabilityImmediate_CanReachImmediate_Patch.cs" />
     <Compile Include="JobDriver_FleeFromCage.cs" />
